@@ -17,13 +17,19 @@ class CommentsService{
 
     return comments
   }
-  async getUserComments(id){
+  async getUserComments(id,page){
+    const data = await CommentModel.find({user:id});
     const comments = await CommentModel.find({user:id})
       .populate('post')
       .populate('user','-password')
+      .skip(page > 1 ? ((page - 1) * 8) : 0)
+      .limit(8)
       .exec()
 
-    return comments
+    return {
+      length:data.length,
+      comments: comments
+    }
   }
 }
 

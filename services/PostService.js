@@ -24,34 +24,61 @@ class PostService {
 
     return post
   }
-  async getPosts(category, type) {
+  async getPosts(category, type, page) {
     if (category === 'all') {
       if (type === 'all') {
-        const posts = await PostModel.find().populate('user', '-password').exec()
-        return posts
+        const data = await PostModel.find()
+        const posts = await PostModel.find()
+        .populate('user', '-password')
+        .skip(page > 1 ? ((page - 1) * 8) : 0)
+        .limit(8)
+        .exec()
+
+        return {
+          length: data.length,
+          posts: posts
+        }
       }
 
       if (type === 'news') {
-        const posts = await PostModel.find({
-          postType: 'news'
-        }).populate('user', '-password').exec()
-        return posts
+        const data = await PostModel.find({postType: 'news'})
+        const posts = await PostModel.find({postType: 'news'})
+        .populate('user', '-password')
+        .skip(page > 1 ? ((page - 1) * 8) : 0)
+        .limit(8)
+        .exec()
+        return {
+          length: data.length,
+          posts: posts
+        }
       }
     }
 
     if (category === 'develop' || category === 'admin' || category === 'design' || category === 'management' || category === 'marketing' || category === 'popsci') {
       if (type === 'all') {
-        const posts = await PostModel.find({
-          category: category
-        }).populate('user', '-password').exec()
-        return posts.filter(post => post.postType === 'post')
+        const data = await PostModel.find({category: category})
+        const posts = await PostModel.find({category: category})
+        .populate('user', '-password')
+        .skip(page > 1 ? ((page - 1) * 8) : 0)
+        .limit(8)
+        .exec()
+        return {
+          length: data.length,
+          posts: posts.filter(post => post.postType === 'post')
+        }
       }
 
       if (type === 'news') {
-        const posts = await PostModel.find({
-          category: category
-        }).populate('user', '-password').exec()
-        return posts.filter(el => el.postType === type)
+        const data = await PostModel.find({category: category})
+        const posts = await PostModel.find({category: category})
+        .populate('user', '-password')
+        .skip(page > 1 ? ((page - 1) * 8) : 0)
+        .limit(8)
+        .exec()
+        return {
+          length: data.length,
+          posts: posts.filter(el => el.postType === type)
+        }
       }
     }
   }

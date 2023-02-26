@@ -93,8 +93,8 @@ class UserController {
   }
   async getUserFavorites(req, res, next) {
     try {
-      const {id} = req.params
-      const posts = await UserService.getUserFavorites(id)
+      const {id,page} = req.params
+      const posts = await UserService.getUserFavorites(id, page)
 
       return res.json(posts)
     } catch(e){
@@ -104,8 +104,8 @@ class UserController {
   }
   async getUserSubs(req, res, next) {
     try {
-      const {id,type} = req.params
-      const posts = await UserService.getUserSubs(id, type)
+      const {id,type,page} = req.params
+      const posts = await UserService.getUserSubs(id, type, page)
 
       return res.json(posts)
     } catch(e){
@@ -115,9 +115,9 @@ class UserController {
   }
   async getUserPosts(req,res,next){
     try {
-      const {id} = req.params
+      const {id,page} = req.params
 
-      const posts = await UserService.getUserPosts(id)
+      const posts = await UserService.getUserPosts(id, page)
       return res.json(posts)
     } catch(e){
       console.log(e);

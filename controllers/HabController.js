@@ -70,8 +70,8 @@ class HabController {
   }
   async searchHabs(req,res,next){
     try {
-      const {category,value} = req.params
-      const habs = await HabService.searchHabs(category,value)
+      const {category,title,page} = req.params
+      const habs = await HabService.searchHabs(category, title, page)
       return res.json(habs)
     } catch(e){
       next(e)

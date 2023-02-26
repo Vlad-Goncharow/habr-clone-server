@@ -3,9 +3,9 @@ import AuthorsService from "../services/AuthorsService.js"
 class AuthorsController{
   async LoadCategoryAuthors(req,res,next){
     try {
-      const {category,title} = req.params
+      const {category,title,page} = req.params
 
-      const authors = await AuthorsService.LoadCategoryAuthors(category, title)
+      const authors = await AuthorsService.LoadCategoryAuthors(category, title, page)
       return res.json(authors)
     } catch(e){
       console.log(e);

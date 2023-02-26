@@ -206,7 +206,7 @@ class UserService{
     const {password,...data} = user._doc
     return data
   }
-  async getUserFavorites(id) {
+  async getUserFavorites(id, page) {
     const user = await UserModel.findById(id)
     .populate({
       path: 'favoritesPosts',
@@ -216,26 +216,42 @@ class UserService{
       }
     }).exec()
 
-    return user.favoritesPosts
+    return {
+      length: user.favoritesPosts.length,
+      posts: user.favoritesPosts.splice((page > 1 ? ((page - 1) * 8) % Number(arr.length) : 0), 8)
+    }
   }
-  async getUserSubs(id,type) {
+  async getUserSubs(id,type,page) {
     if (type === 'subscribers') {
-      const user = await UserModel.findById(id)
-        .populate('userSubscribers')
-
-      return user.userSubscribers
+      const data = await UserModel.findById(id)
+      const user = await UserModel.findById(id).populate('userSubscribers')
+      return {
+        length:data.length,
+        users: user.userSubscribers.splice((page > 1 ? ((page - 1) * 8) % Number(arr.length) : 0), 8)
+      }
     }
 
     if (type === 'subscriptions') {
-      const user = await UserModel.findById(id)
-        .populate('userSubscriptions')
-
-      return user.userSubscriptions
+      const data = await UserModel.findById(id);
+      const user = await UserModel.findById(id).populate('userSubscriptions')
+      
+      return {
+        length: data.length,
+        users: user.userSubscriptions.splice((page > 1 ? ((page - 1) * 8) % Number(arr.length) : 0), 8)
+      }
     }
   }
-  async getUserPosts(id){
-    const posts = await PostModel.find({user:id}).populate('user', '-password').exec()
-    return posts
+  async getUserPosts(id,page){
+    const data = await PostModel.find({user:id})
+
+    const posts = await PostModel.find({user:id}).populate('user', '-password')
+    .skip(page > 1 ? ((page - 1) * 8) : 0)
+    .limit(8)
+    .exec()
+    return {
+      length:data.length,
+      posts: posts
+    }
   }
   async changeUserProfile(values,userId){
     // console.log(values);

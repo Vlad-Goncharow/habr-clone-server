@@ -2,16 +2,21 @@ import {CategoryAuthorsModel} from '../models/CategoryAuthorsModel.js'
 import { HabAuthorsModel } from '../models/HabAuthorsModel.js'
 
 class AuthorsService {
-  async LoadCategoryAuthors(category,title){
+  async LoadCategoryAuthors(category,title,page){
     if(category !== 'all'){
       const data = await CategoryAuthorsModel.findOne({category:category}).populate('authors', '-password').exec()
       if(title === 'all'){
-        return data !== null ? data.authors : []
+        return {
+          length:data.authors.length,
+          items: data !== null ? data.authors.splice((page > 1 ? ((page - 1) * 8) : 0), 8) : []
+        }
       } else {
-        const arr = data !== null ? data.authors.filter(el => el.nickName.includes(title)) : []
-        return arr
+        const arr = data !== null ? data.authors.filter(el => el.nickName.toLowerCase().includes(title.toLowerCase())) : []
+        return {
+          length: arr.length,
+          items: arr.splice((page > 1 ? ((page - 1) * 8) : 0), 8)
+        }
       }
-
     } else {
       const data = await CategoryAuthorsModel.find().populate('authors', '-password').exec()
       const arr = []
@@ -19,9 +24,16 @@ class AuthorsService {
         arr.push(...el.authors)
       })
       if (title === 'all') {
-        return arr.filter((el, index, array) => index === array.indexOf(el))
+        return {
+          length:arr.length,
+          items: arr.splice((page > 1 ? ((page - 1) * 8) : 0), 8)
+        }
       } else {
-        return arr.filter((el, index, array) => index === array.indexOf(el)).filter(el => el.nickName.includes(title))
+        let fined = arr.filter(el => el.nickName.toLowerCase().includes(title.toLowerCase()))
+        return {
+          length: fined.length,
+          items: fined.splice((page > 1 ? ((page - 1) * 8) : 0), 8)
+        }
       }
     }
   }

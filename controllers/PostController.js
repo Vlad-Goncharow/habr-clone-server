@@ -17,12 +17,14 @@ class PostController {
     try {
       const {
         category,
-        type
+        type,
+        page
       } = req.params
 
-      const posts = await PostService.getPosts(category, type)
+      const posts = await PostService.getPosts(category, type, page)
       return res.json(posts)
     } catch (e) {
+      console.log(e);
       next(e)
     }
   }

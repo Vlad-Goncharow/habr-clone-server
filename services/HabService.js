@@ -110,22 +110,46 @@ class HabService{
       return habs
     }
   }
-  async searchHabs(category,value) {
+  async searchHabs(category,title,page) {
     if (category === 'all') {
-      if(value !== 'all'){
-        const habs = await HabModel.find({title:{$regex:value,$options: 'i'}})
-        return habs
+      if(title !== 'all'){
+        const data = await HabModel.find({title:{$regex:title,$options: 'i'}})
+        const habs = await HabModel.find({title:{$regex:title,$options: 'i'}})
+        .skip(page > 1 ? ((page - 1) * 8) : 0)
+        .limit(8)
+        return {
+          length:data.length,
+          items: habs
+        }
       } else {
+        const data = await HabModel.find()
         const habs = await HabModel.find()
-        return habs
+        .skip(page > 1 ? ((page - 1) * 8) : 0)
+        .limit(8)
+        return {
+          length: data.length,
+          items: habs
+        }
       }
     } else {
-      if(value !== 'all'){
-        const habs = await HabModel.find({category:category,title:{$regex:value,$options: 'i'}})
-        return habs
+      if(title !== 'all'){
+        const data = await HabModel.find({category:category,title:{$regex:title,$options: 'i'}})
+        const habs = await HabModel.find({category:category,title:{$regex:title,$options: 'i'}})
+          .skip(page > 1 ? ((page - 1) * 8) : 0)
+          .limit(8)
+        return {
+          length: data.length,
+          items: habs
+        }
       } else {
+        const data = await HabModel.find({category})
         const habs = await HabModel.find({category})
-        return habs
+          .skip(page > 1 ? ((page - 1) * 8) : 0)
+          .limit(8)
+        return {
+          length: data.length,
+          items: habs
+        }
       }
     }
   }

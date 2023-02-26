@@ -13,9 +13,9 @@ class CommentsController {
   }
   async getUserComments(req,res,next){
     try{
-      const {id} = req.params
+      const {id,page} = req.params
 
-      const comments = await CommentsService.getUserComments(id)
+      const comments = await CommentsService.getUserComments(id,page)
       return res.json(comments)
     } catch(e){
       next(e)
