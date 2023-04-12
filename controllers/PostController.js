@@ -103,11 +103,13 @@ class PostController {
   async getHabPosts(req, res, next) {
     try {
       const {
-        id
+        id,
+        page
       } = req.params
-      const posts = await PostService.getHabPosts(id)
+      const posts = await PostService.getHabPosts(id, page)
       return res.json(posts)
     } catch (e) {
+      console.log(e)
       next(e)
     }
   }
@@ -136,9 +138,9 @@ class PostController {
   }
   async postsSearch(req,res,next){
     try{
-      const {title} = req.body
+      const {title,page} = req.params
 
-      const posts = await PostService.postsSearch(title)
+      const posts = await PostService.postsSearch(title, page)
       return res.json(posts)
     } catch(e){
       console.log(e)

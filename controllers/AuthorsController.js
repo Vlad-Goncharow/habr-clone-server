@@ -14,8 +14,8 @@ class AuthorsController{
   }
   async LoadHabAuthors(req,res,next){
     try {
-      const {id,title} = req.params
-      const authors = await AuthorsService.LoadHabAuthors(id, title)
+      const {id,title,page} = req.params
+      const authors = await AuthorsService.LoadHabAuthors(id, title, page)
       return res.json(authors)
     } catch(e) {
       console.log(e);

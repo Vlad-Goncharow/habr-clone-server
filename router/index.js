@@ -52,7 +52,7 @@ router.get('/user/subs/:id/:type/:page', UserController.getUserSubs)
 
 
 router.post('/posts/create', checkAuth, PostController.createPost)
-router.post('/posts/search', PostController.postsSearch)
+router.get('/posts/search/:title/:page', PostController.postsSearch)
 router.get('/posts/popular/:category', PostController.getCategoryPopular)
 router.get('/posts/:category/:type/:page', PostController.getPosts)
 router.get('/post/:id', PostController.getOnePost)
@@ -64,13 +64,13 @@ router.post('/post/removeFavorite/:id', checkAuth, PostController.removeFavorite
 router.get('/habs/search/:category/:title/:page', HabController.searchHabs)
 router.get('/habs/list/:category', HabController.getHabsByCategory)
 router.get('/habs/one/:id', HabController.getOne)
-router.get('/habs/posts/:id', PostController.getHabPosts)
+router.get('/habs/posts/:id/:page', PostController.getHabPosts)
 router.post('/hab/create', checkAuth, HabController.create)
 router.post('/hab/:id/subscribe', checkAuth, HabController.subscribe)
 router.post('/hab/:id/unSubscribe', checkAuth, HabController.unSubscribe)
 router.get('/habs/:category', HabController.loadSideHabs)
 
-router.get('/habs/authors/:id/:title', AuthorsController.LoadHabAuthors)
+router.get('/habs/authors/:id/:title/:page', AuthorsController.LoadHabAuthors)
 router.get('/authors/search/:category/:title/:page', AuthorsController.LoadCategoryAuthors)
 
 router.get('/last/posts/:id', PostController.getLastPopular)

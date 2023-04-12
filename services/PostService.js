@@ -177,9 +177,19 @@ class PostService {
       return data._id
     }
   }
-  async getHabPosts(id){
-    const posts = await PostModel.find({habs:{"$in":[id]}}).populate('user', '-password').exec()
-    return posts
+  async getHabPosts(id,page){
+    const habPosts = await PostModel.find({habs:{"$in":[id]}})
+    const posts = await PostModel
+    .find({habs:{"$in":[id]}})
+    .populate('user', '-password')
+    .skip(page > 1 ? ((page - 1) * 8) : 0)
+    .limit(8)
+    .exec()
+
+    return {
+      length: habPosts.length,
+      posts:posts
+    }
   }
   async getHabAuthors(id) {
     const data = await HabModel.findById(id).populate('authors', '-password').exec()
@@ -196,9 +206,19 @@ class PostService {
       return arr
     }
   }
-  async postsSearch(title){
-    const posts = await PostModel.find({title:{$regex:title,$options: 'i'}}).populate('user','-password')
-    return posts
+  async postsSearch(title,page){
+    const data = await PostModel.find({title:{$regex:title,$options: 'i'}})
+    const posts = await PostModel
+      .find({title:{$regex:title,$options: 'i'}})
+      .populate('user','-password')
+      .skip(page > 1 ? ((page - 1) * 8) : 0)
+      .limit(8)
+      .exec()
+
+    return {
+      posts: posts,
+      length:data.length
+    }
   }
 }
 

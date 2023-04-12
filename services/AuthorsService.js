@@ -60,13 +60,21 @@ class AuthorsService {
     }
   }
 
-  async LoadHabAuthors(id,title){
+  async LoadHabAuthors(id,title,page){
     if(title === 'all'){
+      const authors = await HabAuthorsModel.findOne({hab:id})
       const data = await HabAuthorsModel.findOne({hab:id}).populate('authors','-password')
-      return data !== null ? data.authors : []
+      return {
+        authors: data !== null ? data.authors.slice(page > 1 ? ((page - 1) * 8) : 0) : [],
+        length: authors.authors.length
+      }
     } else {
+      const authors = await HabAuthorsModel.findOne({hab:id})
       const data = await HabAuthorsModel.findOne({hab:id}).populate('authors','-password')
-      return data !== null ? data.authors.filter(el => el.nickName.includes(title)) : []
+      return {
+        authors: data !== null ? data.authors.filter(el => el.nickName.includes(title)).slice(page > 1 ? ((page - 1) * 8) : 0) : [],
+        length: authors.authors.length
+      }
     }
   }
   async addHabAuthors(habId,userId){
