@@ -8,15 +8,19 @@ import {ErrorMiddleWare} from './middlewares/ErrorMiddleWare.js'
 import dotenv from 'dotenv'
 dotenv.config()
 
-const PORT = process.env.PORT || 4444
 
-const app = express()
+const app = express();
+
+const PORT = process.env.PORT || 4444
 app.use(express.json())
 app.use(cookieParser())
+
 app.use(cors({
-  credentials: true,
-  origin: [process.env.CLIENT_URL, 'http://localhost:3001']
-}))
+  origin: true,
+  optionsSuccessStatus: 200,
+  credentials: true
+}));
+
 app.use('/uploads', express.static('uploads'))
 app.use(router)
 app.use(ErrorMiddleWare)
@@ -29,8 +33,7 @@ function start() {
     console.log(e)
   }
 }
-
 app.listen(PORT, () => {
-  console.log(`server start on port ${PORT}`)
+  console.log(`server start on port ${PORT}`);
   start()
-})
+});

@@ -28,8 +28,8 @@ class UserService{
     await TokenService.saveToken(userDto._id, tokens.refreshToken)
 
     return {
-      ...tokens,
-      ...userDto
+      ...user?._doc,
+      ...tokens
     }
   }
   async login(email,password) {
@@ -56,9 +56,8 @@ class UserService{
     const tokens = await TokenService.generateTokens({...userDto})
     
     await TokenService.saveToken(userDto._id, tokens.refreshToken)
-
     return {
-      ...userDto,
+      ...user?._doc,
       ...tokens
     }
   }
@@ -83,8 +82,8 @@ class UserService{
     await TokenService.saveToken(userDto._id, tokens.refreshToken)
 
     return {
-      ...tokens,
-      ...userDto
+      ...user?._doc,
+      ...tokens
     }
   }
   async logout(userId) {
