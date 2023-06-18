@@ -15,13 +15,6 @@ const PORT = process.env.PORT || 4444
 app.use(express.json())
 app.use(cookieParser())
 
-app.all('*', function(req,res,next) {
-  res.header('Access-Control-Allow-Credentials', true);
-  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.header('Access-Control-Allow-Headers', '*');
-  next()
-})
-
 app.use(cors({
   origin: true,
   optionsSuccessStatus: 200,
