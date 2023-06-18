@@ -9,7 +9,7 @@ class UserController {
       res.cookie('refreshToken', userData.refreshToken, {
         maxAge: 30 * 24 * 60 * 60 * 1000,
         httpOnly: true,
-        samesite:'none',
+        sameSite:'none',
         secure:true
       })
 
@@ -27,7 +27,7 @@ class UserController {
       res.cookie('refreshToken', userData.refreshToken, {
         maxAge: 30 * 24 * 60 * 60 * 1000,
         httpOnly: true,
-        samesite:'none',
+        sameSite:'none',
         secure:true
       })
 
@@ -43,7 +43,7 @@ class UserController {
       res.cookie('refreshToken', userData.refreshToken, {
         maxAge: 30 * 24 * 60 * 60 * 1000,
         httpOnly: true,
-        samesite:'none',
+        sameSite:'none',
         secure:true
       })
 
